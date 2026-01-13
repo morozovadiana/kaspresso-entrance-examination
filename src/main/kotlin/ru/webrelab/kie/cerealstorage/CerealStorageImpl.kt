@@ -1,7 +1,5 @@
 package ru.webrelab.kie.cerealstorage
 
-import kotlin.IllegalStateException
-
 class CerealStorageImpl(
     override val containerCapacity: Float,
     override val storageCapacity: Float
