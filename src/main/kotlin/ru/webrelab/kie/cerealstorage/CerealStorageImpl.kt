@@ -21,30 +21,21 @@ class CerealStorageImpl(
     private val storage = mutableMapOf<Cereal, Float>()
     override fun addCereal(cereal: Cereal, amount: Float): Float {
         check(amount > 0) { throw IllegalArgumentException() }
+        check(storageCapacity > storage.values.sum())
         val value = getAmount(cereal) + amount
-        check(storageCapacity > value)
         storage[cereal] = if (value < containerCapacity) value else containerCapacity
-        return if (value > containerCapacity) value - containerCapacity else value
-
+        return if (amount > containerCapacity) amount - containerCapacity else containerCapacity - getAmount(cereal)
     }
 
     override fun getCereal(cereal: Cereal, amount: Float): Float {
         check(storage.containsKey(cereal)) { throw IllegalArgumentException() }
-
-        val result = when {
-            amount == getAmount(cereal) -> amount
-            amount < getAmount(cereal) -> getAmount(cereal) - amount
-            amount > getAmount(cereal) -> getAmount(cereal)
-            else -> throw IllegalArgumentException()
-        }
-        if (storage.getValue(cereal) >= 0F)
+        if (amount <= getAmount(cereal)) {
             storage[cereal] = getAmount(cereal) - amount
-        else {
-            storage[cereal] = 0F
+            return amount
+        } else {
             removeContainer(cereal)
+            return getAmount(cereal)
         }
-        return result
-
     }
 
     override fun removeContainer(cereal: Cereal): Boolean {
@@ -65,5 +56,4 @@ class CerealStorageImpl(
     override fun toString(): String {
         return storage.entries.joinToString { "cereal : \"${it.key}\" - amount : \"${it.value}\"" }
     }
-
 }

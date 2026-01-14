@@ -22,14 +22,24 @@ class CerealStorageImplTest {
     }
 
     @Test
+    fun `check creating container with cereal if it's not in Map with full containerCapacity`() {
+        assertEquals(0F, storage.addCereal(Cereal.BUCKWHEAT, 10F))
+    }
+    @Test
     fun `check creating container with cereal if it's not in Map`() {
-        assertEquals(10F, storage.addCereal(Cereal.BUCKWHEAT, 10F))
+        assertEquals(1F, storage.addCereal(Cereal.BUCKWHEAT, 9F))
     }
 
     @Test
     fun `check adding cereal if it's in Map`() {
         storage.addCereal(Cereal.PEAS, 5F)
-        assertEquals(9F, storage.addCereal(Cereal.PEAS, 4F))
+        assertEquals(1F, storage.addCereal(Cereal.PEAS, 4F))
+    }
+
+    @Test
+    fun `check adding cereal if it's in Map with full containerCapacity`() {
+        storage.addCereal(Cereal.PEAS, 5F)
+        assertEquals(0F, storage.addCereal(Cereal.PEAS, 5F))
     }
 
     @Test
@@ -57,7 +67,7 @@ class CerealStorageImplTest {
     @Test
     fun `check leftover cereal in containerCapacity`() {
         storage.addCereal(Cereal.PEAS, 9F)
-        assertEquals(4F, storage.getCereal(Cereal.PEAS, 5F))
+        assertEquals(5F, storage.getCereal(Cereal.PEAS, 5F))
     }
 
     @Test
@@ -67,7 +77,7 @@ class CerealStorageImplTest {
     }
 
     @Test
-    fun `check leftover bringing cereal more than containerCapacity`() {
+    fun `check leftover bringing cereal more than in containerCapacity`() {
         storage.addCereal(Cereal.RICE, 4F)
         assertEquals(4F, storage.getCereal(Cereal.RICE, 8F))
     }
