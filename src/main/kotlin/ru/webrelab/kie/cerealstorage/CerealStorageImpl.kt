@@ -21,7 +21,8 @@ class CerealStorageImpl(
     private val storage = mutableMapOf<Cereal, Float>()
     override fun addCereal(cereal: Cereal, amount: Float): Float {
         check(amount > 0) { throw IllegalArgumentException() }
-        check(storageCapacity - storage.count() * containerCapacity > containerCapacity)
+        if (cereal !in storage)
+            check(storageCapacity - storage.count() * containerCapacity > containerCapacity)
         val value = getAmount(cereal) + amount
         storage[cereal] = if (value < containerCapacity) value else containerCapacity
         return if (amount > containerCapacity) amount - containerCapacity else 0F
@@ -33,7 +34,6 @@ class CerealStorageImpl(
             storage[cereal] = getAmount(cereal) - amount
             return amount
         } else {
-            removeContainer(cereal)
             return getAmount(cereal)
         }
     }
