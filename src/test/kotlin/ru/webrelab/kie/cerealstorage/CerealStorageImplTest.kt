@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test
 
 class CerealStorageImplTest {
 
-    private val storage = CerealStorageImpl(10f, 20f)
+    private val storage = CerealStorageImpl(10f, 25f)
 
     @Test
     fun `should throw if containerCapacity is negative`() {
@@ -25,15 +25,16 @@ class CerealStorageImplTest {
     fun `check creating container with cereal if it's not in Map with full containerCapacity`() {
         assertEquals(0F, storage.addCereal(Cereal.BUCKWHEAT, 10F))
     }
+
     @Test
     fun `check creating container with cereal if it's not in Map`() {
-        assertEquals(1F, storage.addCereal(Cereal.BUCKWHEAT, 9F))
+        assertEquals(0F, storage.addCereal(Cereal.BUCKWHEAT, 9F))
     }
 
     @Test
     fun `check adding cereal if it's in Map`() {
         storage.addCereal(Cereal.PEAS, 5F)
-        assertEquals(1F, storage.addCereal(Cereal.PEAS, 4F))
+        assertEquals(0F, storage.addCereal(Cereal.PEAS, 4F))
     }
 
     @Test
@@ -60,7 +61,7 @@ class CerealStorageImplTest {
         storage.addCereal(Cereal.PEAS, 10F)
         storage.addCereal(Cereal.BULGUR, 10F)
         assertThrows(IllegalStateException::class.java) {
-            storage.addCereal(Cereal.PEAS, 20F)
+            storage.addCereal(Cereal.RICE, 5F)
         }
     }
 
